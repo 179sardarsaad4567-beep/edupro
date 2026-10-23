@@ -1,11 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://lazy-turtles-arrive.loca.lt/api",
-  headers: {
-    "bypass-tunnel-reminder": "true",
-    "ngrok-skip-browser-warning": "true"
-  }
+  baseURL: "https://YOUR-PINGGY-URL.a.pinggy.link/api", // <--- Yahan apna pinggy url lagayein
 });
 
 api.interceptors.request.use((config) => {
