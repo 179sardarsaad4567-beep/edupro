@@ -2,6 +2,9 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "https://lazy-turtles-arrive.loca.lt/api",
+  headers: {
+    "Bypass-Tunnel-Remainder": "true",
+  },
 });
 
 api.interceptors.request.use((config) => {
