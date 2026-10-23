@@ -1,7 +1,10 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://ebkiq-138-252-74-93.run.pinggy-free.link/api",
+  baseURL: "https://<YAHAN_APNA_NAYA_LOCALTUNNEL_URL_DALO>/api",
+  headers: {
+    "Bypass-Tunnel-Reminder": "true"
+  }
 });
 
 api.interceptors.request.use((config) => {
