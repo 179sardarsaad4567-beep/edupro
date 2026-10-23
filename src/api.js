@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://<YAHAN_APNA_NAYA_LOCALTUNNEL_URL_DALO>/api",
+  baseURL: "https://crazy-grapes-wear.loca.lt/api",
   headers: {
     "Bypass-Tunnel-Reminder": "true"
   }
