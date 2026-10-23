@@ -1,8 +1,9 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://YOUR-NGROK-URL.ngrok-free.app/api", // <--- Yahan apna ngrok url paste karein
+  baseURL: "https://lazy-turtles-arrive.loca.lt/api",
   headers: {
+    "bypass-tunnel-reminder": "true",
     "ngrok-skip-browser-warning": "true"
   }
 });
