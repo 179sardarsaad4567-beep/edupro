@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://YOUR-PINGGY-URL.a.pinggy.link/api", // <--- Yahan apna pinggy url lagayein
+  baseURL: "https://ebkiq-138-252-74-93.run.pinggy-free.link/api",
 });
 
 api.interceptors.request.use((config) => {
