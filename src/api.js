@@ -3,8 +3,9 @@ import axios from "axios";
 const api = axios.create({
   baseURL: "https://lazy-turtles-arrive.loca.lt/api",
   headers: {
-    "Bypass-Tunnel-Remainder": "true",
-  },
+    "bypass-tunnel-reminder": "true",
+    "ngrok-skip-browser-warning": "true"
+  }
 });
 
 api.interceptors.request.use((config) => {
