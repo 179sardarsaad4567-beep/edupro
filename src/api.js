@@ -3,7 +3,8 @@ import axios from "axios";
 const api = axios.create({
   baseURL: "https://crazy-grapes-wear.loca.lt/api",
   headers: {
-    "Bypass-Tunnel-Reminder": "true"
+    "Bypass-Tunnel-Reminder": "true",
+    "bypass-tunnel-reminder": "true"
   }
 });
 
