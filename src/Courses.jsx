@@ -81,15 +81,11 @@ export default function Courses() {
     <div className="min-h-screen bg-slate-50/50 pb-12 overflow-x-hidden">
       <Topbar title="Courses" />
       
-      {/* Main Container with responsive padding */}
+      {/* Main Container */}
       <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
         
-        {/* Header Section: Stack on mobile, side-by-side on sm+ */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Courses</h1>
-            <p className="text-slate-500 text-xs sm:text-sm mt-0.5">Manage academic programs</p>
-          </div>
+        {/* Action Header: Add Course Button */}
+        <div className="flex items-center justify-end mb-6">
           <button 
             onClick={openAdd}
             className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold shadow-lg shadow-indigo-200 transition-all active:scale-95"
