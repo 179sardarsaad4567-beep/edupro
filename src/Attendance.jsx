@@ -89,9 +89,9 @@ export default function Attendance() {
               </div>
             ) : (
               records.map((r) => (
-                <article key={r._id} className="min-w-0 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+                <article key={r._id} className="min-w-0 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:p-5">
                   <div className="flex min-w-0 items-center gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-xs font-bold text-indigo-600">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-xs font-bold text-indigo-600">
                       {r.name
                         ? r.name
                             .split(" ")
@@ -109,21 +109,22 @@ export default function Attendance() {
                       onClick={() => toggle(r._id)}
                       aria-label={`Mark ${r.name || "student"} as ${r.present ? "absent" : "present"}`}
                       aria-pressed={r.present}
-                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 ${
+                      className={`inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl px-3 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 ${
                         r.present
                           ? "bg-emerald-100 text-emerald-600 hover:bg-emerald-200"
                           : "bg-rose-100 text-rose-500 hover:bg-rose-200"
                       }`}
                     >
                       {r.present ? <Check size={18} aria-hidden="true" /> : <X size={18} aria-hidden="true" />}
+                      <span>{r.present ? "Present" : "Absent"}</span>
                     </button>
                   </div>
-                  <div className="mt-4 grid grid-cols-2 gap-3 border-t border-slate-100 pt-3 text-xs">
+                  <div className="mt-4 grid grid-cols-1 gap-3 border-t border-slate-100 pt-3 text-xs min-[400px]:grid-cols-2">
                     <div className="min-w-0">
                       <p className="text-slate-400">Course</p>
                       <p className="mt-1 break-words font-medium text-slate-700">{r.course || "—"}</p>
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <p className="text-slate-400">Overall attendance</p>
                       <p className="mt-1 font-medium text-slate-700">{r.attendance || 0}%</p>
                     </div>
