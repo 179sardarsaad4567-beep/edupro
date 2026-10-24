@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { AuthProvider, useAuth } from "./component/AuthContext";
+import { AuthProvider } from "./component/AuthContext";
 import Layout from "./component/Layout";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
@@ -13,9 +13,9 @@ import Notices from "./Notices";
 import Profile from "./Profile";
 import Admin from "./component/Admin";
 
+// Login band — sab pages open
 function PrivateRoute({ children }) {
-  const { user } = useAuth();
-  return user ? children : <Navigate to="/login" replace />;
+  return children;
 }
 
 export default function App() {
@@ -23,15 +23,8 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/"
-            element={
-              <PrivateRoute>
-                <Layout />
-              </PrivateRoute>
-            }
-          >
+          <Route path="/login" element={<Navigate to="/" replace />} />
+          <Route path="/" element={<Layout />}>
             <Route index element={<Dashboard />} />
             <Route path="students" element={<Students />} />
             <Route path="teachers" element={<Teachers />} />
