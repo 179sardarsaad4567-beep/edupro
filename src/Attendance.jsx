@@ -42,77 +42,128 @@ export default function Attendance() {
   const percent = records.length ? Math.round((presentCount / records.length) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-slate-50/50 pb-12 overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden bg-slate-50/50 pb-12">
       <Topbar title="Attendance" />
-      
-      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-        
-        {/* Header Section: Stack on mobile */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Attendance</h1>
-            <p className="text-slate-500 text-xs sm:text-sm mt-0.5">Mark daily attendance</p>
+
+      <main className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-6 sm:py-6 lg:px-8">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="min-w-0">
+            <h1 className="text-xl font-bold text-slate-800 sm:text-2xl">Attendance</h1>
+            <p className="mt-0.5 text-xs text-slate-500 sm:text-sm">Mark daily attendance</p>
           </div>
-          
-          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-            {/* Date Picker */}
-            <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl px-3 py-2 shadow-sm">
-              <Calendar size={16} className="text-slate-400 shrink-0" />
+
+          <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:flex sm:w-auto sm:gap-3">
+            <label className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm">
+              <Calendar size={16} className="shrink-0 text-slate-400" aria-hidden="true" />
               <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="text-xs sm:text-sm focus:outline-none bg-transparent"
+                aria-label="Attendance date"
+                className="min-w-0 w-full bg-transparent text-xs focus:outline-none sm:text-sm"
               />
-            </div>
-            
-            {/* Percentage Badge */}
-            <div className="bg-indigo-50 text-indigo-600 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold">
+            </label>
+
+            <div className="whitespace-nowrap rounded-xl bg-indigo-50 px-3 py-2 text-xs font-semibold text-indigo-600 sm:px-4 sm:text-sm">
               {presentCount}/{records.length} ({percent}%)
             </div>
 
-            {/* Save Button */}
             <button
               onClick={saveAttendance}
-              className="w-full sm:w-auto px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs sm:text-sm font-semibold shadow-md shadow-indigo-100 transition-colors"
+              className="col-span-2 w-full rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-100 transition-colors hover:bg-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:col-span-1 sm:w-auto"
             >
               Save Attendance
             </button>
           </div>
         </div>
 
-        {/* Responsive Table Container */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[600px]">
+        <section aria-label="Student attendance records">
+          <div className="grid gap-3 lg:hidden">
+            {loading ? (
+              <div className="rounded-2xl border border-slate-100 bg-white px-4 py-12 text-center text-sm text-slate-400 shadow-sm" role="status">
+                Loading...
+              </div>
+            ) : records.length === 0 ? (
+              <div className="rounded-2xl border border-slate-100 bg-white px-4 py-12 text-center text-sm text-slate-400 shadow-sm">
+                No active students found
+              </div>
+            ) : (
+              records.map((r) => (
+                <article key={r._id} className="min-w-0 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-xs font-bold text-indigo-600">
+                      {r.name
+                        ? r.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                            .slice(0, 2)
+                        : "ST"}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h2 className="break-words text-sm font-semibold text-slate-800">{r.name || "Unnamed student"}</h2>
+                      <p className="mt-0.5 break-all text-xs text-slate-500">ID: {r.studentId || "—"}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => toggle(r._id)}
+                      aria-label={`Mark ${r.name || "student"} as ${r.present ? "absent" : "present"}`}
+                      aria-pressed={r.present}
+                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 ${
+                        r.present
+                          ? "bg-emerald-100 text-emerald-600 hover:bg-emerald-200"
+                          : "bg-rose-100 text-rose-500 hover:bg-rose-200"
+                      }`}
+                    >
+                      {r.present ? <Check size={18} aria-hidden="true" /> : <X size={18} aria-hidden="true" />}
+                    </button>
+                  </div>
+                  <div className="mt-4 grid grid-cols-2 gap-3 border-t border-slate-100 pt-3 text-xs">
+                    <div className="min-w-0">
+                      <p className="text-slate-400">Course</p>
+                      <p className="mt-1 break-words font-medium text-slate-700">{r.course || "—"}</p>
+                    </div>
+                    <div>
+                      <p className="text-slate-400">Overall attendance</p>
+                      <p className="mt-1 font-medium text-slate-700">{r.attendance || 0}%</p>
+                    </div>
+                  </div>
+                </article>
+              ))
+            )}
+          </div>
+
+          <div className="hidden overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm lg:block">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[720px] border-collapse text-left">
               <thead>
                 <tr className="bg-slate-50 text-slate-500 text-[11px] sm:text-xs uppercase tracking-wider">
-                  <th className="px-4 sm:px-5 py-3.5 font-semibold">Student</th>
-                  <th className="px-4 sm:px-5 py-3.5 font-semibold">ID</th>
-                  <th className="px-4 sm:px-5 py-3.5 font-semibold">Course</th>
-                  <th className="px-4 sm:px-5 py-3.5 font-semibold">Overall %</th>
-                  <th className="px-4 sm:px-5 py-3.5 font-semibold text-center">Today</th>
+                  <th className="px-5 py-3.5 font-semibold">Student</th>
+                  <th className="px-5 py-3.5 font-semibold">ID</th>
+                  <th className="px-5 py-3.5 font-semibold">Course</th>
+                  <th className="px-5 py-3.5 font-semibold">Overall %</th>
+                  <th className="px-5 py-3.5 text-center font-semibold">Today</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {loading ? (
                   <tr>
-                    <td colSpan="5" className="px-5 py-12 text-center text-slate-400 text-sm">
+                    <td colSpan="5" className="px-5 py-12 text-center text-sm text-slate-400" role="status">
                       Loading...
                     </td>
                   </tr>
                 ) : records.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="px-5 py-12 text-center text-slate-400 text-sm">
+                    <td colSpan="5" className="px-5 py-12 text-center text-sm text-slate-400">
                       No active students found
                     </td>
                   </tr>
                 ) : (
                   records.map((r) => (
                     <tr key={r._id} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="px-4 sm:px-5 py-3.5">
+                      <td className="px-5 py-3.5">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold shrink-0">
+                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-xs font-bold text-indigo-600">
                             {r.name
                               ? r.name
                                   .split(" ")
@@ -121,33 +172,36 @@ export default function Attendance() {
                                   .slice(0, 2)
                               : "ST"}
                           </div>
-                          <p className="font-medium text-slate-800 text-xs sm:text-sm truncate">{r.name}</p>
+                          <p className="break-words text-sm font-medium text-slate-800">{r.name || "Unnamed student"}</p>
                         </div>
                       </td>
-                      <td className="px-4 sm:px-5 py-3.5 text-xs sm:text-sm text-slate-600 truncate">{r.studentId}</td>
-                      <td className="px-4 sm:px-5 py-3.5 text-xs sm:text-sm text-slate-600 truncate">{r.course}</td>
-                      <td className="px-4 sm:px-5 py-3.5 text-xs sm:text-sm text-slate-600">{r.attendance || 0}%</td>
-                      <td className="px-4 sm:px-5 py-3.5 text-center">
+                      <td className="break-all px-5 py-3.5 text-sm text-slate-600">{r.studentId || "—"}</td>
+                      <td className="break-words px-5 py-3.5 text-sm text-slate-600">{r.course || "—"}</td>
+                      <td className="px-5 py-3.5 text-sm text-slate-600">{r.attendance || 0}%</td>
+                      <td className="px-5 py-3.5 text-center">
                         <button
+                          type="button"
                           onClick={() => toggle(r._id)}
-                          className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl inline-flex items-center justify-center transition-all ${
+                          aria-label={`Mark ${r.name || "student"} as ${r.present ? "absent" : "present"}`}
+                          aria-pressed={r.present}
+                          className={`inline-flex h-9 w-9 items-center justify-center rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 ${
                             r.present
                               ? "bg-emerald-100 text-emerald-600 hover:bg-emerald-200"
                               : "bg-rose-100 text-rose-500 hover:bg-rose-200"
                           }`}
                         >
-                          {r.present ? <Check size={16} /> : <X size={16} />}
+                          {r.present ? <Check size={16} aria-hidden="true" /> : <X size={16} aria-hidden="true" />}
                         </button>
                       </td>
                     </tr>
                   ))
                 )}
               </tbody>
-            </table>
+              </table>
+            </div>
           </div>
-        </div>
-
-      </div>
+        </section>
+      </main>
     </div>
   );
 }
